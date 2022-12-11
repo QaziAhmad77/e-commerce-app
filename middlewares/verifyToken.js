@@ -1,9 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const { isNil, isNull } = require("lodash");
 const Users = require("../models/User");
 const Products = require("../models/Product");
-
 
 module.exports = {
   verifyTokenAndAuthorization: async (req, res, next) => {
@@ -46,8 +45,7 @@ module.exports = {
       if (user.isAdmin === true) {
         req.user = user;
         next();
-      }
-      else {
+      } else {
         throw { status: 401, message: "This is not an Admin" };
       }
     } catch (err) {
@@ -57,6 +55,4 @@ module.exports = {
         .send(err.message || "Something went wrong");
     }
   },
-}
-
-
+};
