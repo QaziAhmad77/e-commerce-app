@@ -23,9 +23,7 @@ module.exports = {
       next();
     } catch (err) {
       console.log(err);
-      return res
-        .status(err.status || 500)
-        .send(err.message || "Something went wrong");
+      return res.status(err.status || 500).send(err.message || "Something went wrong");
     }
   },
   verifyTokenAndAdmin: async (req, res, next) => {
@@ -50,9 +48,7 @@ module.exports = {
       }
     } catch (err) {
       console.log(err);
-      return res
-        .status(err.status || 500)
-        .send(err.message || "Something went wrong");
+      return res.status(err.status || 500).send(err.message || "Something went wrong");
     }
   },
 };
