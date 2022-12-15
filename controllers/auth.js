@@ -8,10 +8,7 @@ module.exports = {
   register: async (req, res) => {
     try {
       const { username, email, password } = req.body;
-      const encryptingPassword = CryptoJS.AES.encrypt(
-        password,
-        process.env.PASS_SECRET
-      ).toString(); // because password has type String
+      const encryptingPassword = CryptoJS.AES.encrypt(password, process.env.PASS_SECRET).toString(); // because password has type String
       console.log(encryptingPassword);
       const newUser = new Users({
         username: username,
@@ -19,14 +16,13 @@ module.exports = {
         password: encryptingPassword,
       });
       const savedUser = await newUser.save();
+      console.log(savedUser);
       res.status(201).send({ savedUser });
       // 200 successful
       // 201 successfully added
     } catch (err) {
       console.log(err);
-      return res
-        .status(err.status || 500)
-        .send(err.message || "Something went wrong");
+      return res.status(err.status || 500).send(err.message || "Something went wrong");
     }
   },
   login: async (req, res) => {
@@ -41,10 +37,7 @@ module.exports = {
         throw { status: 404, message: "User doesn't exist" };
       }
 
-      const decryptPassword = CryptoJS.AES.decrypt(
-        user.password,
-        process.env.PASS_SECRET
-      ).toString(CryptoJS.enc.Utf8);
+      const decryptPassword = CryptoJS.AES.decrypt(user.password, process.env.PASS_SECRET).toString(CryptoJS.enc.Utf8);
       console.log(decryptPassword);
       if (decryptPassword !== password) {
         throw { status: 400, message: "Wrong credentials!" };
@@ -58,7 +51,7 @@ module.exports = {
           user: user,
         },
         process.env.JWT_SECRET,
-        { expiresIn: "20m" }
+        { expiresIn: "90m" }
       );
       res.status(200).send({ token, user });
     } catch (err) {
@@ -84,9 +77,7 @@ module.exports = {
       //     const { password, ...others } = user._doc;
       // res.status(200).json({ accessToken, ...others });
       console.log(err);
-      return res
-        .status(err.status || 500)
-        .send(err.message || "Something went wrong");
+      return res.status(err.status || 500).send(err.message || "Something went wrong");
     }
   },
 };
