@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
-const Users = require("../models/User");
-const CryptoJS = require("crypto-js");
+const mongoose = require('mongoose');
+const Users = require('../models/User');
+const CryptoJS = require('crypto-js');
 // npm i crypto-js  really strong hashing algorithm. Alot of many other algorithm is also avaiable
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   register: async (req, res) => {
@@ -22,14 +22,14 @@ module.exports = {
       // 201 successfully added
     } catch (err) {
       console.log(err);
-      return res.status(err.status || 500).send(err.message || "Something went wrong");
+      return res.status(err.status || 500).send(err.message || 'Something went wrong');
     }
   },
   login: async (req, res) => {
     try {
       const { username, password } = req.body;
       if (!username || !password) {
-        throw { status: 400, message: "Required feilds cannot be empty" };
+        throw { status: 400, message: 'Required feilds cannot be empty' };
       }
 
       let user = await Users.findOne({ username });
@@ -40,7 +40,7 @@ module.exports = {
       const decryptPassword = CryptoJS.AES.decrypt(user.password, process.env.PASS_SECRET).toString(CryptoJS.enc.Utf8);
       console.log(decryptPassword);
       if (decryptPassword !== password) {
-        throw { status: 400, message: "Wrong credentials!" };
+        throw { status: 400, message: 'Wrong credentials!' };
       }
       console.log(user);
 
@@ -51,7 +51,7 @@ module.exports = {
           user: user,
         },
         process.env.JWT_SECRET,
-        { expiresIn: "90m" }
+        { expiresIn: '90m' }
       );
       res.status(200).send({ token, user });
     } catch (err) {
@@ -77,7 +77,7 @@ module.exports = {
       //     const { password, ...others } = user._doc;
       // res.status(200).json({ accessToken, ...others });
       console.log(err);
-      return res.status(err.status || 500).send(err.message || "Something went wrong");
+      return res.status(err.status || 500).send(err.message || 'Something went wrong');
     }
   },
 };
